@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ритм: концепт приложения</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#dfe3df;--ph:#f6f4ef;--ink:#15181a;--mut:#555c60;--line:#15181a1f;--acc:#17756d;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{font:400 17px/1.5 Onest,Arial,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+.w{max-width:1200px;margin:0 auto;padding:36px 16px 44px;display:grid;grid-template-columns:minmax(0,1fr) 370px minmax(0,1fr);gap:48px;align-items:center;min-height:100vh}
+h1{font-size:clamp(42px,5.6vw,76px);font-weight:500;line-height:1;letter-spacing:-.03em}
+.lead{font-size:20px;line-height:1.35;margin-top:18px}
+.tech{list-style:none;padding:0}
+.tech li{padding:15px 0}
+.tech b{display:block;font-weight:500;font-size:20px;line-height:1.2}
+.tech span{color:var(--mut);font-size:16px}
+.ph{position:relative;width:100%;max-width:370px;height:760px;margin:0 auto;background:var(--ph);border:9px solid #101214;border-radius:46px;overflow:hidden;animation:in 1.1s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(44px) scale(.98)}}
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sc{position:absolute;inset:0 0 74px;padding:30px 22px 8px;opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .45s,transform .6s var(--ease),visibility 0s .45s;display:flex;flex-direction:column;z-index:2}
+.sc.on{opacity:1;visibility:visible;transform:none;transition:opacity .45s .1s,transform .6s .1s var(--ease)}
+.t{font-size:27px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.sub{font-size:15px;color:var(--mut);margin-top:2px}
+.num{margin-top:236px;text-align:center}
+.num b{display:block;font-size:72px;font-weight:300;line-height:1;letter-spacing:-.04em}
+.num span{font-size:16px}
+.ctl{margin-top:auto;display:grid;gap:4px}
+.ctl label{font-size:15px;display:grid;grid-template-columns:1fr auto;align-items:center}
+.ctl input{grid-column:1/3;width:100%;height:36px;accent-color:var(--acc);cursor:pointer}
+.ctl output{font-weight:500}
+.plan{list-style:none;padding:0;margin-top:138px;display:grid;gap:8px}
+.plan li{background:#fff;padding:15px 16px;display:flex;justify-content:space-between;gap:12px;animation:r .55s var(--ease) both}
+.plan li b{font-weight:500}
+.plan li span{color:var(--mut);font-size:15px;flex:none}
+@keyframes r{from{opacity:0;transform:translateX(18px)}}
+.why{margin-top:12px;font-size:15px}
+.sl{margin-top:auto;display:flex;align-items:flex-end;gap:3px;height:150px}
+.sl i{flex:1;background:var(--c);transition:height .7s var(--ease);min-height:4px}
+.lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;margin-top:9px}
+.lg span:before{content:"";display:inline-block;width:10px;height:10px;margin-right:5px;background:var(--c)}
+.big{font-size:54px;font-weight:300;letter-spacing:-.03em;line-height:1;margin-top:124px}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:auto}
+.grid i{aspect-ratio:1;background:var(--acc);opacity:var(--o);animation:p .5s var(--ease) both;animation-delay:calc(var(--n)*14ms)}
+@keyframes p{from{transform:scale(.4);opacity:0}}
+.nav{position:absolute;z-index:3;left:0;right:0;bottom:0;height:74px;display:grid;grid-template-columns:repeat(4,1fr);padding:0 10px 10px;background:var(--ph)}
+.nav button{border:0;background:none;font-size:14px;color:var(--mut);font-weight:500;transition:color .25s}
+.nav button[aria-selected=true]{color:var(--ink);font-weight:700}
+.nt{font-size:14px;color:var(--mut);margin-top:16px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media(max-width:1020px){.w{grid-template-columns:1fr;gap:30px;min-height:0}.tech li{padding:9px 0}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="w">
+<div>
+<h1>Ритм</h1>
+<p class="lead">Живая сфера показывает состояние тела. Подвигайте ползунки: она успокаивается или напрягается, а план на день перестраивается.</p>
+<p class="nt">Концепт MVP, данные условные. Приложение не заменяет консультацию врача.</p>
+</div>
+<div class="ph" id="ph">
+<canvas id="c" aria-hidden="true"></canvas>
+<section class="sc on" data-s="0" aria-label="Сегодня"><p class="t">Сегодня</p><p class="sub">Готовность к нагрузке</p><div class="num"><b id="rd">0</b><span id="rs"></span></div><div class="ctl"><label>Сон<output id="o1"></output><input id="s" type="range" min="4" max="9.5" step=".5" value="7.5"></label><label>Нагрузка вчера<output id="o2"></output><input id="l" type="range" min="0" max="10" step="1" value="4"></label><label>Пульс покоя<output id="o3"></output><input id="h" type="range" min="45" max="90" step="1" value="58"></label></div></section>
+<section class="sc" data-s="1" aria-label="План"><p class="t">План</p><p class="sub">Под состояние сегодня</p><ul class="plan" id="pl"></ul><p class="why" id="wy"></p></section>
+<section class="sc" data-s="2" aria-label="Сон"><p class="t">Сон</p><p class="sub" id="sd"></p><div class="sl" id="sl"></div><div class="lg"><span style="--c:#15181a">Глубокий</span><span style="--c:#17756d">Лёгкий</span><span style="--c:#d98a5f">REM</span></div></section>
+<section class="sc" data-s="3" aria-label="Прогресс"><p class="t">Прогресс</p><p class="sub">Готовность за 4 недели</p><p class="big" id="av"></p><p>средняя за месяц</p><div class="grid" id="gr"></div></section>
+<nav class="nav" role="tablist" aria-label="Разделы" id="nv"></nav>
+</div>
+<ul class="tech">
+<li><b>Живая 3D-сфера</b><span>Собственный GLSL-шейдер: форма и цвет считаются на видеокарте в реальном времени</span></li>
+<li><b>Один объект на всех экранах</b><span>Сфера перетекает между разделами, а не появляется заново</span></li>
+<li><b>Логика, а не картинка</b><span>Готовность считается по сну, нагрузке и пульсу, план меняется вместе с ней</span></li>
+<li><b>В Figma</b><span>UI-кит на токенах, варианты компонентов и прототип с такими же переходами</span></li>
+</ul>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)},rd=70,shown=0,tab=0;
+var P={h:['Интервалы',' 30 мин'],};
+function calc(){var s=+$('s').value,l=+$('l').value,h=+$('h').value;var a=100-Math.min(100,Math.abs(8-s)*24),b=100-l*7,c=100-Math.max(0,h-55)*2.2;rd=Math.max(5,Math.round(.5*a+.3*b+.2*c));$('o1').textContent=String(s).replace('.',',')+' ч';$('o2').textContent=l+' из 10';$('o3').textContent=h+' уд/мин';ren()}
+function tier(){return rd>=75?2:rd>=50?1:0}
+var PL=[[['Прогулка','30 мин'],['Дыхание','5 мин'],['Ранний сон','до 23:00']],[['Силовая','35 мин'],['Кардио, зона 2','20 мин'],['Растяжка','10 мин']],[['Интервалы','30 мин'],['Силовая: ноги','25 мин'],['Растяжка','10 мин']]],WHY=['Организму нужно восстановление, нагрузку лучше снизить.','Обычный рабочий день: держим план.','Хорошее восстановление: можно прибавить.'],RS=['Лучше восстановиться','Обычная нагрузка','Можно больше'],lt=-1;
+function ren(){var t=tier();$('rs').textContent=RS[t];if(t!=lt){lt=t;$('pl').innerHTML=PL[t].map(function(p,i){return '<li style="animation-delay:'+i*70+'ms"><b>'+p[0]+'</b><span>'+p[1]+'</span></li>'}).join('');$('wy').textContent=WHY[t]}
+ var s=+$('s').value;$('sd').textContent=String(s).replace('.',',')+' ч этой ночью';var C=['#15181a','#17756d','#d98a5f','#17756d','#15181a','#17756d','#d98a5f','#17756d','#d98a5f','#17756d','#15181a','#17756d','#d98a5f','#17756d'],H=[46,28,70,34,62,30,78,26,84,36,40,24,92,30];if(!$('sl').children.length)H.forEach(function(x,i){var e=document.createElement('i');e.style.setProperty('--c',C[i]);$('sl').appendChild(e)});[].forEach.call($('sl').children,function(e,i){e.style.height=Math.round(H[i]*(.45+.55*(s-4)/5.5))+'%'});
+ var g='';for(var i=0;i<28;i++){var v=i==27?rd:42+Math.round(Math.abs(Math.sin(i*2.13))*50);g+='<i style="--o:'+(.18+v/100*.82).toFixed(2)+';--n:'+i+'"></i>'}if($('gr').dataset.r!=rd){$('gr').innerHTML=g;$('gr').dataset.r=rd}var sum=0;for(i=0;i<27;i++)sum+=42+Math.round(Math.abs(Math.sin(i*2.13))*50);$('av').textContent=Math.round((sum+rd)/28)}
+['s','l','h'].forEach(function(i){$(i).oninput=calc});
+['Сегодня','План','Сон','Прогресс'].forEach(function(n,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=n;b.setAttribute('aria-selected',i==0);b.onclick=function(){go(i)};$('nv').appendChild(b)});
+function go(i){tab=i;document.querySelectorAll('.sc').forEach(function(s,k){s.classList.toggle('on',k==i)});[].forEach.call($('nv').children,function(b,k){b.setAttribute('aria-selected',k==i)})}
+calc();
+var RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var cv=$('c'),r=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true,preserveDrawingBuffer:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(30,1,.1,30);cam.position.z=9;
+var U={t:{value:0},s:{value:.3}};
+var M=new THREE.ShaderMaterial({uniforms:U,vertexShader:`
+uniform float t,s;varying vec3 N,V;
+float f(vec3 p){float a=.1+.17*s,q=1.3+1.1*s;return a*(sin(p.x*q+t*.9)*sin(p.y*q*1.1-t*.7)+.5*sin(p.z*q*2.1+t*1.3)*sin(p.x*q*2.3-t)+.22*s*sin(p.y*q*5.+t*2.2)*sin(p.z*q*4.5));}
+vec3 d(vec3 p){vec3 n=normalize(p);return n*(1.+f(n));}
+void main(){vec3 n=normalize(position),a=normalize(cross(n,vec3(.01,1.,.02))),b=cross(n,a);float e=.012;vec3 p=d(n),p1=d(normalize(n+a*e)),p2=d(normalize(n+b*e));vec4 mv=modelViewMatrix*vec4(p,1.);N=normalize(normalMatrix*cross(p1-p,p2-p));V=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
+fragmentShader:`
+uniform float s,t;varying vec3 N,V;
+vec3 pal(float x){return .5+.5*cos(6.2831*(x+vec3(.0,.12,.3)));}
+void main(){vec3 n=normalize(N);float fr=pow(1.-abs(dot(n,V)),2.2);vec3 calm=vec3(.09,.46,.43),hot=vec3(.85,.33,.2),base=mix(calm,hot,smoothstep(.22,.72,s));vec3 L=normalize(vec3(-.5,.8,.6));float dif=max(dot(n,L),0.)*.75+.3;float sp=pow(max(dot(reflect(-L,n),V),0.),60.);vec3 iri=pal(fr*.9+n.y*.2+t*.03);vec3 c=base*dif+iri*fr*.55+vec3(1.)*sp*.7;gl_FragColor=vec4(c,1.);}`});
+var ball=new THREE.Mesh(new THREE.IcosahedronGeometry(1,36),M);sc.add(ball);
+var T=[[0,1.0,.6],[.76,1.92,.24],[0,.55,.62],[.78,1.92,.24]],cur=[0,1.0,.3],st=.3;
+function size(){var b=cv.parentNode.getBoundingClientRect();r.setSize(cv.parentNode.clientWidth,cv.parentNode.clientHeight,false);cam.aspect=cv.parentNode.clientWidth/cv.parentNode.clientHeight;cam.updateProjectionMatrix()}addEventListener('resize',size);size();
+var last=performance.now(),vis=true;new IntersectionObserver(function(e){vis=e[0].isIntersecting}).observe(cv);
+var still=location.search.indexOf('still')>=0,kick=40;function frame(n){requestAnimationFrame(frame);if(!vis)return;if(still&&kick--<=0)return;var dt=still?.05:Math.min(.05,(n-last)/1000);last=n;if(!RM)U.t.value+=dt*(.6+st*1.5);var g=1-Math.pow(.0025,dt),tg=T[tab];for(var i=0;i<3;i++)cur[i]+=(tg[i]-cur[i])*g;ball.position.set(cur[0],cur[1],0);ball.scale.setScalar(cur[2]);st+=((1-rd/100)-st)*g;U.s.value=st;ball.rotation.y+=dt*.12;shown+=(rd-shown)*Math.min(1,g*1.4);$('rd').textContent=Math.round(shown);r.render(sc,cam)}
+requestAnimationFrame(frame);
+window.__t={go:function(i){go(i);kick=40},kick:function(){kick=40}};
+</script>
+</body>
+</html>
